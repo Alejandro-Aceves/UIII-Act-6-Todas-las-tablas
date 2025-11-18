@@ -1,0 +1,51 @@
+{% extends 'app_instrumental/base.html' %}
+
+{% block title %}{% if proveedor %}Editar{% else %}Nuevo{% endif %} Proveedor{% endblock %}
+
+{% block content %}
+<h1>{% if proveedor %}Editar{% else %}Nuevo{% endif %} Proveedor</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="nombre_empresa">Nombre de Empresa:</label>
+        <input type="text" id="nombre_empresa" name="nombre_empresa" value="{{ proveedor.nombre_empresa|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" name="telefono" value="{{ proveedor.telefono|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ proveedor.email|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="rfc">RFC:</label>
+        <input type="text" id="rfc" name="rfc" value="{{ proveedor.rfc|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="direccion">Dirección:</label>
+        <textarea id="direccion" name="direccion" rows="3">{{ proveedor.direccion|default:'' }}</textarea>
+    </div>
+    
+    <div class="form-group">
+        <label for="ciudad">Ciudad:</label>
+        <input type="text" id="ciudad" name="ciudad" value="{{ proveedor.ciudad|default:'' }}">
+    </div>
+    
+    <div class="form-group">
+        <label for="activo">
+            <input type="checkbox" id="activo" name="activo" {% if proveedor.activo or not proveedor %}checked{% endif %}>
+            Activo
+        </label>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'proveedores_list' %}" class="btn btn-danger">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'app_instrumental/base.html' %}
+
+{% block title %}Detalles de Venta{% endblock %}
+
+{% block content %}
+<h1>📝 Detalles de Venta</h1>
+
+<!-- Barra de búsqueda -->
+<form method="get" class="search-container">
+    <input type="text" name="q" placeholder="Buscar por ID, nombre o marca de instrumento..." value="{{ query }}" autofocus>
+    <button type="submit">🔍 Buscar</button>
+    {% if query %}
+    <a href="{% url 'detalles_venta_list' %}" class="btn btn-clear">✖ Limpiar</a>
+    {% endif %}
+</form>
+
+{% if query %}
+<div class="search-results">
+    Mostrando resultados para: <strong>"{{ query }}"</strong> - {{ detalles|length }} detalle(s) encontrado(s)
+</div>
+{% endif %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID Detalle</th>
+            <th>ID Venta</th>
+            <th>Instrumento</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Descuento</th>
+            <th>Subtotal</th>
+            <th>Notas</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in detalles %}
+        <tr>
+            <td>{{ detalle.id_detalle_venta }}</td>
+            <td>{{ detalle.id_venta.id_venta }}</td>
+            <td>
+                {% if detalle.id_instrumento %}
+                    {{ detalle.id_instrumento.nombre }} - {{ detalle.id_instrumento.marca }}
+                {% else %}
+                    Sin instrumento
+                {% endif %}
+            </td>
+            <td>{{ detalle.cantidad }}</td>
+            <td>${{ detalle.precio_unitario }}</td>
+            <td>${{ detalle.descuento_linea }}</td>
+            <td><strong>${{ detalle.subtotal }}</strong></td>
+            <td>{{ detalle.notas|truncatewords:5 }}</td>
+            <td>
+                <a href="{% url 'detalle_venta_edit' detalle.id_detalle_venta %}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{% url 'detalle_venta_delete' detalle.id_detalle_venta %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este detalle?')">Borrar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="9" style="text-align: center;">
+                {% if query %}
+                    No se encontraron detalles de venta que coincidan con "{{ query }}"
+                {% else %}
+                    No hay detalles de venta registrados
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'detalle_venta_create' %}" class="btn btn-success">+ Agregar Detalle de Venta</a>
+</div>
+{% endblock %}

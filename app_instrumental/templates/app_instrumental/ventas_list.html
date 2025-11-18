@@ -1,0 +1,82 @@
+{% extends 'app_instrumental/base.html' %}
+
+{% block title %}Ventas{% endblock %}
+
+{% block content %}
+<h1>💰 Ventas</h1>
+
+<!-- Barra de búsqueda -->
+<form method="get" class="search-container">
+    <input type="text" name="q" placeholder="Buscar por ID de venta, cliente o empleado..." value="{{ query }}" autofocus>
+    <button type="submit">🔍 Buscar</button>
+    {% if query %}
+    <a href="{% url 'ventas_list' %}" class="btn btn-clear">✖ Limpiar</a>
+    {% endif %}
+</form>
+
+{% if query %}
+<div class="search-results">
+    Mostrando resultados para: <strong>"{{ query }}"</strong> - {{ ventas|length }} venta(s) encontrada(s)
+</div>
+{% endif %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID Venta</th>
+            <th>Fecha</th>
+            <th>Empleado</th>
+            <th>Cliente</th>
+            <th>Subtotal</th>
+            <th>Descuento</th>
+            <th>Impuesto</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for venta in ventas %}
+        <tr>
+            <td>{{ venta.id_venta }}</td>
+            <td>{{ venta.fecha_venta|date:"d/m/Y H:i" }}</td>
+            <td>{{ venta.id_empleado.nombre|default:"Sin asignar" }}</td>
+            <td>{{ venta.id_cliente.nombre|default:"Sin asignar" }}</td>
+            <td>${{ venta.subtotal }}</td>
+            <td>${{ venta.descuento }}</td>
+            <td>${{ venta.impuesto }}</td>
+            <td><strong>${{ venta.total }}</strong></td>
+            <td>
+                {% if venta.estado == 'PENDIENTE' %}
+                    <span style="color: #f39c12;">⏳ {{ venta.get_estado_display }}</span>
+                {% elif venta.estado == 'PAGADA' %}
+                    <span style="color: #27ae60;">✅ {{ venta.get_estado_display }}</span>
+                {% elif venta.estado == 'CANCELADA' %}
+                    <span style="color: #e74c3c;">❌ {{ venta.get_estado_display }}</span>
+                {% elif venta.estado == 'ENTREGADA' %}
+                    <span style="color: #3498db;">📦 {{ venta.get_estado_display }}</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'venta_edit' venta.id_venta %}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{% url 'venta_delete' venta.id_venta %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta venta?')">Borrar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="10" style="text-align: center;">
+                {% if query %}
+                    No se encontraron ventas que coincidan con "{{ query }}"
+                {% else %}
+                    No hay ventas registradas
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'venta_create' %}" class="btn btn-success">+ Agregar Venta</a>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'app_instrumental/base.html' %}
+
+{% block title %}Empleados{% endblock %}
+
+{% block content %}
+<h1>👔 Empleados</h1>
+
+<!-- Barra de búsqueda -->
+<form method="get" class="search-container">
+    <input type="text" name="q" placeholder="Buscar por nombre, puesto o NSS..." value="{{ query }}" autofocus>
+    <button type="submit">🔍 Buscar</button>
+    {% if query %}
+    <a href="{% url 'empleados_list' %}" class="btn btn-clear">✖ Limpiar</a>
+    {% endif %}
+</form>
+
+{% if query %}
+<div class="search-results">
+    Mostrando resultados para: <strong>"{{ query }}"</strong> - {{ empleados|length }} empleado(s) encontrado(s)
+</div>
+{% endif %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Puesto</th>
+            <th>Salario</th>
+            <th>NSS</th>
+            <th>Edad</th>
+            <th>Teléfono</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for empleado in empleados %}
+        <tr>
+            <td>{{ empleado.id_empleado }}</td>
+            <td>{{ empleado.nombre }}</td>
+            <td>{{ empleado.puesto }}</td>
+            <td>${{ empleado.salario }}</td>
+            <td>{{ empleado.nss }}</td>
+            <td>{{ empleado.edad }}</td>
+            <td>{{ empleado.telefono }}</td>
+            <td>{% if empleado.activo %}✅ Sí{% else %}❌ No{% endif %}</td>
+            <td>
+                <a href="{% url 'empleado_edit' empleado.id_empleado %}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{% url 'empleado_delete' empleado.id_empleado %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este empleado?')">Borrar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="9" style="text-align: center;">
+                {% if query %}
+                    No se encontraron empleados que coincidan con "{{ query }}"
+                {% else %}
+                    No hay empleados registrados
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'empleado_create' %}" class="btn btn-success">+ Agregar Empleado</a>
+</div>
+{% endblock %}

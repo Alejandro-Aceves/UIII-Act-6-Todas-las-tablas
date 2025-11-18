@@ -1,0 +1,55 @@
+{% extends 'app_instrumental/base.html' %}
+
+{% block title %}Inicio - Tienda de Instrumentos{% endblock %}
+
+{% block content %}
+
+<div class="welcome-section">
+    <h1>🎸 Bienvenido a la Tienda de Instrumentos 🎵</h1>
+    <p>Sistema de gestión integral para tu tienda de instrumentos musicales</p>
+    
+    <div class="module-grid">
+        <div class="module-card">
+            <h3>📦 Proveedores</h3>
+            <p>Gestiona la información de tus proveedores</p>
+            <a href="{% url 'proveedores_list' %}" class="btn btn-primary">Ver Proveedores</a>
+        </div>
+        
+        <div class="module-card">
+            <h3>👥 Clientes</h3>
+            <p>Administra tu base de clientes</p>
+            <a href="{% url 'clientes_list' %}" class="btn btn-primary">Ver Clientes</a>
+        </div>
+        
+        <div class="module-card">
+            <h3>🎸 Instrumentos</h3>
+            <p>Gestiona el catálogo de instrumentos</p>
+            <a href="{% url 'instrumentos_list' %}" class="btn btn-primary">Ver Instrumentos</a>
+        </div>
+        
+        <div class="module-card">
+            <h3>👔 Empleados</h3>
+            <p>Administra tu personal</p>
+            <a href="{% url 'empleados_list' %}" class="btn btn-primary">Ver Empleados</a>
+        </div>
+        
+        <div class="module-card">
+            <h3>📊 Inventarios</h3>
+            <p>Controla tu stock de productos</p>
+            <a href="{% url 'inventarios_list' %}" class="btn btn-primary">Ver Inventarios</a>
+        </div>
+        
+        <div class="module-card">
+            <h3>💰 Ventas</h3>
+            <p>Registra y consulta ventas</p>
+            <a href="{% url 'ventas_list' %}" class="btn btn-primary">Ver Ventas</a>
+        </div>
+        
+        <div class="module-card">
+            <h3>📝 Detalles de Venta</h3>
+            <p>Gestiona los detalles de cada venta</p>
+            <a href="{% url 'detalles_venta_list' %}" class="btn btn-primary">Ver Detalles</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

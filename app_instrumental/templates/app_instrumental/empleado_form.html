@@ -1,0 +1,51 @@
+{% extends 'app_instrumental/base.html' %}
+
+{% block title %}{% if empleado %}Editar{% else %}Nuevo{% endif %} Empleado{% endblock %}
+
+{% block content %}
+<h1>{% if empleado %}Editar{% else %}Nuevo{% endif %} Empleado</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ empleado.nombre|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="puesto">Puesto:</label>
+        <input type="text" id="puesto" name="puesto" value="{{ empleado.puesto|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="salario">Salario:</label>
+        <input type="number" step="0.01" id="salario" name="salario" value="{{ empleado.salario|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="nss">NSS:</label>
+        <input type="text" id="nss" name="nss" value="{{ empleado.nss|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" value="{{ empleado.edad|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" name="telefono" value="{{ empleado.telefono|default:'' }}">
+    </div>
+    
+    <div class="form-group">
+        <label for="activo">
+            <input type="checkbox" id="activo" name="activo" {% if empleado.activo or not empleado %}checked{% endif %}>
+            Activo
+        </label>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'empleados_list' %}" class="btn btn-danger">Cancelar</a>
+</form>
+{% endblock %}

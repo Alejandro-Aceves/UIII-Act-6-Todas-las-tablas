@@ -1,0 +1,58 @@
+{% extends 'app_instrumental/base.html' %}
+
+{% block title %}{% if inventario %}Editar{% else %}Nuevo{% endif %} Inventario{% endblock %}
+
+{% block content %}
+<h1>{% if inventario %}Editar{% else %}Nuevo{% endif %} Inventario</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="id_instrumento">Instrumento:</label>
+        <select id="id_instrumento" name="id_instrumento" required>
+            <option value="">Seleccione un instrumento</option>
+            {% for instrumento in instrumentos %}
+            <option value="{{ instrumento.id_instrumento }}" {% if inventario.id_instrumento.id_instrumento == instrumento.id_instrumento %}selected{% endif %}>
+                {{ instrumento.nombre }} - {{ instrumento.marca }} ({{ instrumento.modelo }})
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="id_empleado">Empleado Responsable:</label>
+        <select id="id_empleado" name="id_empleado">
+            <option value="">Sin asignar</option>
+            {% for empleado in empleados %}
+            <option value="{{ empleado.id_empleado }}" {% if inventario.id_empleado.id_empleado == empleado.id_empleado %}selected{% endif %}>
+                {{ empleado.nombre }} - {{ empleado.puesto }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="num_bodega">Número de Bodega:</label>
+        <input type="text" id="num_bodega" name="num_bodega" value="{{ inventario.num_bodega|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="cantidad_actual">Cantidad Actual:</label>
+        <input type="number" id="cantidad_actual" name="cantidad_actual" value="{{ inventario.cantidad_actual|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="cantidad_minima">Cantidad Mínima:</label>
+        <input type="number" id="cantidad_minima" name="cantidad_minima" value="{{ inventario.cantidad_minima|default:'5' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="costo_unitario">Costo Unitario:</label>
+        <input type="number" step="0.01" id="costo_unitario" name="costo_unitario" value="{{ inventario.costo_unitario|default:'' }}" required>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'inventarios_list' %}" class="btn btn-danger">Cancelar</a>
+</form>
+{% endblock %}

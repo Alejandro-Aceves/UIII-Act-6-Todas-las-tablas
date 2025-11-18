@@ -1,0 +1,59 @@
+{% extends 'app_instrumental/base.html' %}
+
+{% block title %}{% if instrumento %}Editar{% else %}Nuevo{% endif %} Instrumento{% endblock %}
+
+{% block content %}
+<h1>{% if instrumento %}Editar{% else %}Nuevo{% endif %} Instrumento</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ instrumento.nombre|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="marca">Marca:</label>
+        <input type="text" id="marca" name="marca" value="{{ instrumento.marca|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" name="modelo" value="{{ instrumento.modelo|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="categoria">Categoría:</label>
+        <select id="categoria" name="categoria" required>
+            <option value="">Seleccione una categoría</option>
+            {% for key, value in categorias %}
+            <option value="{{ key }}" {% if instrumento.categoria == key %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="precio_compra">Precio de Compra:</label>
+        <input type="number" step="0.01" id="precio_compra" name="precio_compra" value="{{ instrumento.precio_compra|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="precio_venta">Precio de Venta:</label>
+        <input type="number" step="0.01" id="precio_venta" name="precio_venta" value="{{ instrumento.precio_venta|default:'' }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="id_proveedor">Proveedor:</label>
+        <select id="id_proveedor" name="id_proveedor">
+            <option value="">Sin proveedor</option>
+            {% for proveedor in proveedores %}
+            <option value="{{ proveedor.id }}" {% if instrumento.id_proveedor.id == proveedor.id %}selected{% endif %}>{{ proveedor.nombre_empresa }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'instrumentos_list' %}" class="btn btn-danger">Cancelar</a>
+</form>
+{% endblock %}
